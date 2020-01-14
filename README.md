@@ -1,0 +1,22 @@
+# API RESTful para Sistema de Usuários de Carros
+
+Criar aplicação que exponha uma API RESTful de criação de usuários e carros com login.
+
+### ESTÓRIAS DE USUÁRIO
+* CRIAÇÃO DE USUÁRIOS COM OU SEM CARROS
+* LISTAR USUÁRIOS REGISTRADOS NO SISTEMA
+* BUSCAR USUÁRIO POR ID
+* REMOVER USUÁRIO POR ID
+* ATUALIZAR USUÁRIO POR ID
+
+
+* REALIZAÇÃO DE LOGIN
+* RETORNAR DADOS DE USUÁRIO LOGADO
+* CADASTRAR UM NOVO CARRO PARA O USUÁRIO LOGADO
+* BUSCAR UM CARRO DO USUÁRIO LOGADO PELO ID 
+* REMOVER UM CARRO DO USUÁRIO LOGADO PELO ID
+* ATUALIZAR UM CARRO DO USUÁRIO LOGADO PELO ID
+ 
+### SOLUÇÃO
+ The following guides illustrate how to use some features concretely:
+
