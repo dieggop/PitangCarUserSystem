@@ -1,4 +1,4 @@
-package com.desafio.CarUserSystem.controller;
+package com.desafio.carusersystem.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

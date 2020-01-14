@@ -22,6 +22,10 @@
 	</properties>
 
 	<dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -43,7 +47,6 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.swagger.core.v3</groupId>
@@ -75,6 +78,11 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.4.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -95,8 +103,8 @@
 						<configuration>
 							<inputSpec>${project.basedir}/src/main/resources/api/caruser.yaml</inputSpec>
 							<language>spring</language>
-							<apiPackage>com.desafio.CarUserSystem.api</apiPackage>
-							<modelPackage>com.desafio.CarUserSystem.api.model</modelPackage>
+							<apiPackage>com.desafio.carusersystem.api</apiPackage>
+							<modelPackage>com.desafio.carusersystem.api.model</modelPackage>
 							<generateSupportingFiles>false</generateSupportingFiles>
 						</configuration>
 					</execution>

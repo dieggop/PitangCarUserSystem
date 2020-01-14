@@ -3,13 +3,13 @@ info:
   description: >-
     API para gestão de um Sistema de Usuários de Carros
   version: 1.0.0
-  title: CarUserSystem
+  title: carusersystem
   contact:
     email: dieggopsc@gmail.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-host: com.desafio.CarUserSystem
+host: com.desafio.carusersystem
 basePath: /
 tags:
   - name: usuario
