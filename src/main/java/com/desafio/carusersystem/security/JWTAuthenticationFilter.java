@@ -1,6 +1,7 @@
 package com.desafio.carusersystem.security;
 
 import com.auth0.jwt.JWT;
+import com.desafio.carusersystem.api.model.UserLogin;
 import com.desafio.carusersystem.entity.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 import static com.desafio.carusersystem.utils.SecurityConstant.*;
+import static com.desafio.carusersystem.utils.SecurityConstant.*;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -30,18 +32,20 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Autowired
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
+        setFilterProcessesUrl(AUTH_LOGIN_URL);
+
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
-            Usuario creds = new ObjectMapper()
-                    .readValue(req.getInputStream(), Usuario.class);
+            UserLogin creds = new ObjectMapper()
+                    .readValue(req.getInputStream(), UserLogin.class);
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            creds.getUsername(),
+                            creds.getLogin(),
                             creds.getPassword(),
                             new ArrayList<>())
             );

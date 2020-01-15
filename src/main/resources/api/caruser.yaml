@@ -20,7 +20,7 @@ schemes:
   - http
 paths:
   /api/signin:
-    get:
+    post:
       tags:
         - usuario
       summary: Visualização dos dados do usuario logado
@@ -36,6 +36,13 @@ paths:
         '404':
           description: Invalid login or password
 definitions:
+  UserLogin:
+    type: object
+    properties:
+      login:
+        type: string
+      password:
+        type: string
   Usuario:
     type: object
     properties:
