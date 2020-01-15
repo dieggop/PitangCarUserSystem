@@ -64,4 +64,9 @@ public class AuthController implements ApiApi {
     public ResponseEntity<Void> removeUsuario(Long id) {
         return null;
     }
+
+    @Override
+    public ResponseEntity<UsuarioMe> dadosUsuario() {
+        return null;
+    }
 }

@@ -3,21 +3,23 @@ package com.desafio.carusersystem.entity;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+import java.time.LocalDate;
 
 @Entity
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long    id;
-    private String  firstName;
-    private String  lastName;
-    private String  email;
-    private String  birthday;
-    private String  username;
-    private String  password;
-    private String  phone;
-    private Long    counter;
-
+    private Long        id;
+    private String      firstName;
+    private String      lastName;
+    private String      email;
+    private LocalDate   birthday;
+    private String      username;
+    private String      password;
+    private String      phone;
+    private Long        counter;
+    private LocalDate   createdAt;
+    private LocalDate   lastLogin;
     @OneToMany
     @JoinColumn(name = "usuario_id")
     @OrderBy("counter DESC, model ASC")
@@ -55,11 +57,11 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
@@ -95,6 +97,22 @@ public class Usuario {
         this.counter = counter;
     }
 
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDate getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(LocalDate lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
     public List<Cars> getCars() {
         return cars;
     }
@@ -115,6 +133,8 @@ public class Usuario {
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 ", counter=" + counter +
+                ", createdAt=" + createdAt +
+                ", lastLogin=" + lastLogin +
                 ", cars=" + cars +
                 '}';
     }
