@@ -29,10 +29,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private AuthenticationManager authenticationManager;
 
-    @Autowired
+
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        setFilterProcessesUrl(AUTH_LOGIN_URL);
+//        setFilterProcessesUrl(AUTH_LOGIN_URL);
 
     }
 
@@ -43,12 +43,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             UserLogin creds = new ObjectMapper()
                     .readValue(req.getInputStream(), UserLogin.class);
 
-            return authenticationManager.authenticate(
+            Authentication retorno = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             creds.getLogin(),
                             creds.getPassword(),
                             new ArrayList<>())
             );
+
+            return retorno;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
