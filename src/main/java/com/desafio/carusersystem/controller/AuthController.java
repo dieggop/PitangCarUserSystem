@@ -69,4 +69,29 @@ public class AuthController implements ApiApi {
     public ResponseEntity<UsuarioMe> dadosUsuario() {
         return null;
     }
+
+    @Override
+    public ResponseEntity<Void> atualizaCarro(Long id, @Valid Cars body) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> cadastrarCarro(@Valid Cars body) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Cars> listarCarros() {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Cars> recuperaCarro(Long id) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> removeCarro(Long id) {
+        return null;
+    }
 }
