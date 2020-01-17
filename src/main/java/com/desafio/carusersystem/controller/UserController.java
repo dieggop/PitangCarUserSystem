@@ -38,9 +38,6 @@ public class UserController implements UsersApi {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
-
-
-
     @Override
     public ResponseEntity<Void> atualizaUsuario(Long id, @Valid Usuario body) {
 
@@ -107,7 +104,6 @@ public class UserController implements UsersApi {
 
         }
     }
-
 
     private void validarUsuario(Usuario body ) {
         if (body.getFirstName().isEmpty() || body.getBirthday().isEmpty() || body.getEmail().isEmpty() || body.getLastName().isEmpty() || body.getLogin().isEmpty() || body.getPassword().isEmpty() || body.getPhone().isEmpty()) throw new BlankFields();
