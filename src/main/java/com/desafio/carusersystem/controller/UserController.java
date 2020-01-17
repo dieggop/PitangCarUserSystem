@@ -6,6 +6,7 @@ import com.desafio.carusersystem.api.model.UsuarioAtualiza;
 import com.desafio.carusersystem.api.model.UsuarioResponse;
 import com.desafio.carusersystem.exceptions.BlankFields;
 import com.desafio.carusersystem.exceptions.ExceptionConflict;
+import com.desafio.carusersystem.exceptions.ExceptionNotFound;
 import com.desafio.carusersystem.exceptions.Message;
 import com.desafio.carusersystem.security.JwtUtil;
 import com.desafio.carusersystem.service.UsuarioService;
@@ -67,7 +68,6 @@ public class UserController implements UsersApi {
             System.out.println(ModelToEntity.UsuarioModelToUsuarioEntity(body));
             usuarioService.save(ModelToEntity.UsuarioModelToUsuarioEntity(body));
         } catch (BlankFields e) {
-
             return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }catch(ExceptionConflict e) {
             return new ResponseEntity(new Message(e.getMessage(), HttpStatus.CONFLICT), HttpStatus.CONFLICT);
@@ -85,12 +85,27 @@ public class UserController implements UsersApi {
 
     @Override
     public ResponseEntity<Usuario> recuperaUsuario(Long id) {
-        return null;
+
+            try{
+                return new ResponseEntity<>(ModelToEntity.UsuarioEntityToUsuarioModel(usuarioService.recuperarUsuario(id)), HttpStatus.OK);
+
+            }catch(ExceptionNotFound e) {
+                return new ResponseEntity(new Message(e.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+
+            }
+
     }
 
     @Override
     public ResponseEntity<Void> removeUsuario(Long id) {
-        return null;
+        try{
+            usuarioService.removeUsuario(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        }catch(ExceptionNotFound e) {
+            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+
+        }
     }
 
 

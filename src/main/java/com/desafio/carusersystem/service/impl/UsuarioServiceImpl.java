@@ -84,12 +84,21 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void removeUsuario(Long id) {
+        Optional<Usuario> retorno = usuarioRepository.findById(id);
+        if (!retorno.isPresent()) {
+            throw new ExceptionNotFound("not found");
+        }
+        retorno.ifPresent(usuario -> usuarioRepository.delete(usuario));
 
     }
 
     @Override
     public Usuario recuperarUsuario(Long id) {
-        return null;
+        Optional<Usuario> retorno = usuarioRepository.findById(id);
+        if (!retorno.isPresent()) {
+            throw new ExceptionNotFound("not found");
+        }
+        return retorno.get();
     }
 
     @Override
