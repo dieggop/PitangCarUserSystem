@@ -28,7 +28,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         usuario.setCreatedAt(LocalDate.now());
         usuario.setLastLogin(LocalDate.now());
-        usuario.setCounter(new Long(0));
         usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
 
         usuarioRepository.save(usuario);

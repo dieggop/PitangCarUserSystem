@@ -21,7 +21,6 @@ public class Usuario {
     private String      username;
     private String      password;
     private String      phone;
-    private Long        counter;
     private LocalDate   createdAt;
 
 
@@ -96,13 +95,6 @@ public class Usuario {
         this.phone = phone;
     }
 
-    public Long getCounter() {
-        return counter;
-    }
-
-    public void setCounter(Long counter) {
-        this.counter = counter;
-    }
 
     public LocalDate getCreatedAt() {
         return createdAt;
@@ -139,7 +131,6 @@ public class Usuario {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
-                ", counter=" + counter +
                 ", createdAt=" + createdAt +
                 ", lastLogin=" + lastLogin +
                 ", cars=" + cars +

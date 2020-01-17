@@ -16,12 +16,21 @@ public class Cars {
     private String licensePlate;
     private String model;
     private String color;
+    private Long   counter =0L;
+
 
     @ManyToOne
     @JoinColumn(name="usuario_id")
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     private Usuario usuario;
 
+    public Long getCounter() {
+        return counter;
+    }
+
+    public void setCounter(Long counter) {
+        this.counter = counter;
+    }
 
     public Long getId() {
         return id;
@@ -79,6 +88,7 @@ public class Cars {
                 ", licensePlate='" + licensePlate + '\'' +
                 ", model='" + model + '\'' +
                 ", color='" + color + '\'' +
+                ", counter=" + counter +
                 ", usuario=" + usuario +
                 '}';
     }
