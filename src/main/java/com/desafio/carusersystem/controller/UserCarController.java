@@ -101,7 +101,17 @@ public class UserCarController implements ApiApi {
 
     @Override
     public ResponseEntity<UsuarioMe> dadosUsuario() {
-        return null;
+
+
+        try {
+
+            return new ResponseEntity(ModelToEntity.UsuarioEntityToUsuarioModel(usuarioService.meusDados()), HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+
+        }
+
     }
 
     @Override
