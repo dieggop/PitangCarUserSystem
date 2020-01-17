@@ -139,7 +139,7 @@ paths:
           description: Usuario object
           required: true
           schema:
-            $ref: '#/definitions/UsuarioAtualiza'
+            $ref: '#/definitions/Usuario'
       responses:
         '200':
           description: successful operation

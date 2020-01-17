@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static java.util.Collections.emptyList;
 
 @Service
@@ -21,7 +23,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario applicationUser = usuarioRepository.findByUsername(username);
+        Optional<Usuario> usuario = usuarioRepository.findByUsername(username);
+        Usuario applicationUser = usuario.get();
         if (applicationUser == null) {
             throw new UsernameNotFoundException("“Invalid login or password");
         }

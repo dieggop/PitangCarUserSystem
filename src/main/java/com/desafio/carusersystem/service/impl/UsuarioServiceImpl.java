@@ -1,6 +1,7 @@
 package com.desafio.carusersystem.service.impl;
 
 import com.desafio.carusersystem.entity.Usuario;
+import com.desafio.carusersystem.exceptions.ExceptionConflict;
 import com.desafio.carusersystem.exceptions.ExceptionNotFound;
 import com.desafio.carusersystem.repository.UsuarioRepository;
 import com.desafio.carusersystem.security.JwtUtil;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -43,12 +45,41 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (usuario.getId() != null && usuarioRepository.findById(usuario.getId()) == null) {
             throw new ExceptionNotFound("Usuário Não encontrado");
         }
-        usuario.setCreatedAt(LocalDate.now());
-        usuario.setLastLogin(LocalDate.now());
+
+        validacaoSaveOrUpdate(usuario);
+
+        if (usuario.getId() == null ) {
+            usuario.setCreatedAt(LocalDate.now());
+            usuario.setLastLogin(LocalDate.now());
+        }
         usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
 
         usuarioRepository.save(usuario);
         return usuario;
+    }
+
+    private void validacaoSaveOrUpdate(Usuario usuario) throws ExceptionConflict {
+        Optional<Usuario> byUsername = usuarioRepository.findByUsername(usuario.getUsername());
+        Optional<Usuario> byEmail = usuarioRepository.findByEmail(usuario.getEmail());
+
+        if (usuario.getId() == null)
+        {
+            if (byUsername.isPresent()) {
+                throw new ExceptionConflict("Login already exists");
+            }
+            if (byEmail.isPresent()) {
+                throw new ExceptionConflict("Email already exists");
+            }
+        }
+        if (usuario.getId() != null)
+        {
+            if (byUsername.isPresent() && byUsername.get().getId() != usuario.getId()) {
+                throw new ExceptionConflict("Login already exists");
+            }
+            if (byEmail.isPresent() && byEmail.get().getId() != usuario.getId()) {
+                throw new ExceptionConflict("Email already exists");
+            }
+        }
     }
 
     @Override
@@ -85,8 +116,8 @@ public class UsuarioServiceImpl implements UsuarioService {
                 usernamePasswordAuthenticationToken
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-
-                Usuario applicationUser = usuarioRepository.findByUsername(username);
+                Optional<Usuario> usuario = usuarioRepository.findByUsername(username);
+                Usuario applicationUser = usuario.get(); //usuarioRepository.findByUsername(username);
                 return applicationUser;
             } else {
                 throw new ExceptionNotFound("Token inválido");

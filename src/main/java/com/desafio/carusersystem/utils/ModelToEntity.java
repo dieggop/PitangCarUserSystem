@@ -53,8 +53,12 @@ public class ModelToEntity {
         retorno.setEmail(usuario.getEmail());
         retorno.setLogin(usuario.getUsername());
         retorno.setPhone(usuario.getPhone());
-        retorno.createdAt(usuario.getCreatedAt().toString());
-        retorno.setLastLogin(usuario.getLastLogin().toString());
+        if (usuario.getCreatedAt() != null) {
+            retorno.createdAt(usuario.getCreatedAt().toString());
+        }
+        if (usuario.getLastLogin() != null) {
+            retorno.setLastLogin(usuario.getLastLogin().toString());
+        }
         retorno.setCars(usuario.getCars().stream().map(car -> {
             com.desafio.carusersystem.api.model.Cars carro =new com.desafio.carusersystem.api.model.Cars();
             carro.setColor(car.getColor());

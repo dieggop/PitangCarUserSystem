@@ -5,6 +5,7 @@ import com.desafio.carusersystem.api.model.Usuario;
 import com.desafio.carusersystem.api.model.UsuarioAtualiza;
 import com.desafio.carusersystem.api.model.UsuarioResponse;
 import com.desafio.carusersystem.exceptions.BlankFields;
+import com.desafio.carusersystem.exceptions.ExceptionConflict;
 import com.desafio.carusersystem.exceptions.Message;
 import com.desafio.carusersystem.security.JwtUtil;
 import com.desafio.carusersystem.service.UsuarioService;
@@ -40,8 +41,23 @@ public class UserController implements UsersApi {
 
 
     @Override
-    public ResponseEntity<Void> atualizaUsuario(Long id, @Valid UsuarioAtualiza body) {
-        return null;
+    public ResponseEntity<Void> atualizaUsuario(Long id, @Valid Usuario body) {
+
+        if (id != body.getId()) {
+            return new ResponseEntity(new Message("Invalid fields", HttpStatus.CONFLICT), HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            validarUsuario(body);
+            usuarioService.save(ModelToEntity.UsuarioModelToUsuarioEntity(body));
+        } catch (BlankFields e) {
+            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+        } catch(ExceptionConflict e) {
+            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.CONFLICT), HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
     @Override
@@ -53,6 +69,8 @@ public class UserController implements UsersApi {
         } catch (BlankFields e) {
 
             return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+        }catch(ExceptionConflict e) {
+            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.CONFLICT), HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -60,11 +78,9 @@ public class UserController implements UsersApi {
 
     @Override
     public ResponseEntity<UsuarioResponse> listarUsuarios() {
-
         UsuarioResponse retorno = new UsuarioResponse();
         retorno.setUsuarios(ModelToEntity.listUsuarioEntityToListUsuarioModel(usuarioService.listaUsuarios()));
         return new ResponseEntity<>(retorno, HttpStatus.OK);
-
     }
 
     @Override
