@@ -367,6 +367,9 @@ definitions:
         type: string
       color:
         type: string
+      count:
+        type: integer
+        format: int64
   UsuarioLoginResponse:
     type: object
     properties:

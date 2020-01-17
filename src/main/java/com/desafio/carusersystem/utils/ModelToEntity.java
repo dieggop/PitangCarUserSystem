@@ -32,9 +32,27 @@ public class ModelToEntity {
     }
 
     public static com.desafio.carusersystem.api.model.Usuario UsuarioEntityToUsuarioModel(Usuario usuario) {
-        com.desafio.carusersystem.api.model.Usuario retornar = new com.desafio.carusersystem.api.model.Usuario();
-        retornar.setFirstName(usuario.getFirstName());
+        com.desafio.carusersystem.api.model.Usuario retorno = new com.desafio.carusersystem.api.model.Usuario();
+        retorno.setId(usuario.getId());
+        retorno.setBirthday(usuario.getBirthday().toString());
+        retorno.setFirstName(usuario.getFirstName());
+        retorno.setLastName(usuario.getLastName());
+        retorno.setEmail(usuario.getEmail());
+        retorno.setLogin(usuario.getUsername());
+        retorno.setPhone(usuario.getPhone());
+        retorno.createdAt(usuario.getCreatedAt().toString());
+        retorno.setLastLogin(usuario.getLastLogin().toString());
+        retorno.setCars(usuario.getCars().stream().map(car -> {
+            com.desafio.carusersystem.api.model.Cars carro =new com.desafio.carusersystem.api.model.Cars();
+            carro.setColor(car.getColor());
+            carro.setId(car.getId());
+            carro.setLicensePlate(car.getLicensePlate());
+            carro.setModel(car.getModel());
+            carro.setYear(car.getYear());
+            carro.setCount(car.getCounter());
+            return carro;
+        }).collect(Collectors.toList()));
 
-        return retornar;
+        return retorno;
     }
 }
