@@ -34,6 +34,7 @@ public class LogarController implements SigninApi {
     private UsuarioService usuarioService;
     @Autowired
     private UserDetailsService userDetailsService;
+
     @Autowired
     private JwtUtil jwtTokenUtil;
 

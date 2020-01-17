@@ -273,9 +273,12 @@ definitions:
       password:
         type: string
   UsuarioResponse:
-    type: array
-    items:
-      $ref: '#/definitions/Usuario'
+    type: object
+    properties:
+      usuarios:
+        type: array
+        items:
+          $ref: '#/definitions/Usuario'
   UsuarioAtualiza:
     type: object
     properties:

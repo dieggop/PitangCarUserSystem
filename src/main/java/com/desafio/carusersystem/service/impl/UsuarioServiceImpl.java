@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Transactional
@@ -93,5 +94,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         return null;
+    }
+
+    @Override
+    public List<Usuario> listaUsuarios() {
+        List<Usuario> retorno = usuarioRepository.findAll();
+        return retorno;
     }
 }

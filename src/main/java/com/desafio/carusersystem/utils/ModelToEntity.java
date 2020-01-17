@@ -4,6 +4,8 @@ import com.desafio.carusersystem.entity.Cars;
 import com.desafio.carusersystem.entity.Usuario;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ModelToEntity {
@@ -31,6 +33,17 @@ public class ModelToEntity {
         return retorno;
     }
 
+    public static List<com.desafio.carusersystem.api.model.Usuario> listUsuarioEntityToListUsuarioModel(List<Usuario> usuarios) {
+    if (!usuarios.isEmpty()) {
+    List<com.desafio.carusersystem.api.model.Usuario> retorno = new ArrayList<>();
+        for(Usuario usuario : usuarios) {
+            retorno.add(UsuarioEntityToUsuarioModel(usuario));
+        }
+//        return usuarios.stream().map(usuario -> UsuarioEntityToUsuarioModel(usuario)).collect(Collectors.toList());
+        return retorno;
+    }
+        return null;
+    }
     public static com.desafio.carusersystem.api.model.Usuario UsuarioEntityToUsuarioModel(Usuario usuario) {
         com.desafio.carusersystem.api.model.Usuario retorno = new com.desafio.carusersystem.api.model.Usuario();
         retorno.setId(usuario.getId());
