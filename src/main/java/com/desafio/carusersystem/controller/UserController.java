@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
-    @RequestMapping(value = "/api/me",
-            produces = { "application/json" },
-            method = RequestMethod.GET)
-    public ResponseEntity<UsuarioLoginResponse> getUsuario() {
-        return new ResponseEntity<>(new UsuarioLoginResponse(), HttpStatus.OK);
-
-    }
+//    @RequestMapping(value = "/api/me",
+//            produces = { "application/json" },
+//            method = RequestMethod.GET)
+//    public ResponseEntity<UsuarioLoginResponse> getUsuario() {
+//        return new ResponseEntity<>(new UsuarioLoginResponse(), HttpStatus.OK);
+//
+//    }
 }

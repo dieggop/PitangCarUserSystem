@@ -320,6 +320,10 @@ definitions:
         type: string
       lastLogin:
         type: string
+      cars:
+        type: array
+        items:
+          $ref: '#/definitions/Cars'
   UsuarioMe:
     type: object
     properties:
@@ -355,7 +359,8 @@ definitions:
         type: integer
         format: int64
       year:
-        type: string
+        type: integer
+        format: int64
       licensePlate:
         type: string
       model:

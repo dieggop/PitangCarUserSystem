@@ -1,9 +1,13 @@
 package com.desafio.carusersystem.entity;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 import java.time.LocalDate;
+
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 public class Usuario {
@@ -19,10 +23,13 @@ public class Usuario {
     private String      phone;
     private Long        counter;
     private LocalDate   createdAt;
+
+
     private LocalDate   lastLogin;
     @OneToMany
     @JoinColumn(name = "usuario_id")
     @OrderBy("counter DESC, model ASC")
+    @Cascade({CascadeType.ALL})
     private List<Cars> cars;
 
     public Long getId() {
