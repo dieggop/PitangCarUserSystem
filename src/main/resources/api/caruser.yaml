@@ -17,7 +17,7 @@ tags:
   - name: carros
     description: Operações de Carros
 paths:
-  /api/signin:
+  /signin:
     post:
       tags:
         - usuario
@@ -40,7 +40,7 @@ paths:
             $ref: '#/definitions/UsuarioLoginResponse'
         '404':
           description: Invalid login or password
-  /api/users:
+  /users:
     get:
       tags:
         - usuario
@@ -76,7 +76,7 @@ paths:
           description: Unauthorized/invalid session
         '409':
           description: Invalid fields/Missing fields
-  /api/users/{id}:
+  /users/{id}:
     get:
       tags:
         - usuario
@@ -145,7 +145,7 @@ paths:
           description: successful operation
         '404':
           description: usuário não existe
-  /api/me:
+  /me:
     get:
       tags:
         - carros
@@ -159,7 +159,7 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/UsuarioMe'
-  /api/cars:
+  /cars:
     get:
       tags:
         - carros
@@ -195,7 +195,7 @@ paths:
           description: Unauthorized/invalid session
         '409':
           description: Invalid fields/Missing fields
-  /api/cars/{id}:
+  /cars/{id}:
     get:
       tags:
         - carro
@@ -379,3 +379,8 @@ definitions:
 externalDocs:
   description: ApiSwagger
   url: 'https://app.swaggerhub.com/apis/dieggop/CarUserSystem/1.0.0'
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /dieggop/CarUserSystem/1.0.0
+schemes:
+  - https

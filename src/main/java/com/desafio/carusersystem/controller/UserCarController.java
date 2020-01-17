@@ -1,7 +1,8 @@
 package com.desafio.carusersystem.controller;
 
 import com.auth0.jwt.JWT;
-import com.desafio.carusersystem.api.ApiApi;
+import com.desafio.carusersystem.api.MeApi;
+import com.desafio.carusersystem.api.UsersApi;
 import com.desafio.carusersystem.api.model.*;
 import com.desafio.carusersystem.exceptions.BlankFields;
 import com.desafio.carusersystem.exceptions.Message;
@@ -21,7 +22,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -32,8 +35,10 @@ import static com.desafio.carusersystem.utils.SecurityConstant.EXPIRATION_TIME;
 import static com.desafio.carusersystem.utils.SecurityConstant.SECRET;
 
 
+@CrossOrigin
 @RestController
-public class UserCarController implements ApiApi {
+@RequestMapping("/api")
+public class UserCarController implements UsersApi {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -44,25 +49,9 @@ public class UserCarController implements ApiApi {
     private UserDetailsService userDetailsService;
     @Autowired
     private JwtUtil jwtTokenUtil;
-    @Override
-    public ResponseEntity<UsuarioLoginResponse> logarUsuario(@Valid UserLogin body) {
-        System.out.print(body);
-        try {
 
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(body.getLogin(), body.getPassword()));
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(body.getLogin());
 
-            final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-            return new ResponseEntity<>(new UsuarioLoginResponse().token(jwt), HttpStatus.OK);
-        }
-        catch(BadCredentialsException e ) {
-            return new ResponseEntity(new Message(e.getMessage(),HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
-        }
-    }
 
     @Override
     public ResponseEntity<Void> atualizaUsuario(Long id, @Valid UsuarioAtualiza body) {
@@ -73,7 +62,7 @@ public class UserCarController implements ApiApi {
     public ResponseEntity<Void> cadastrarUsuario(@Valid Usuario body) {
         try {
             validarUsuario(body);
-        System.out.println(ModelToEntity.UsuarioModelToUsuarioEntity(body));
+            System.out.println(ModelToEntity.UsuarioModelToUsuarioEntity(body));
             usuarioService.save(ModelToEntity.UsuarioModelToUsuarioEntity(body));
         } catch (BlankFields e) {
 
@@ -99,48 +88,8 @@ public class UserCarController implements ApiApi {
     }
 
 
-    @Override
-    public ResponseEntity<UsuarioMe> dadosUsuario() {
-
-
-        try {
-
-            return new ResponseEntity(ModelToEntity.UsuarioEntityToUsuarioModel(usuarioService.meusDados()), HttpStatus.OK);
-
-        } catch (Exception e) {
-            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
-
-        }
-
-    }
-
-    @Override
-    public ResponseEntity<Void> atualizaCarro(Long id, @Valid Cars body) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Void> cadastrarCarro(@Valid Cars body) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Cars> listarCarros() {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Cars> recuperaCarro(Long id) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Void> removeCarro(Long id) {
-        return null;
-    }
-
-
     private void validarUsuario(Usuario body ) {
         if (body.getFirstName().isEmpty() || body.getBirthday().isEmpty() || body.getEmail().isEmpty() || body.getLastName().isEmpty() || body.getLogin().isEmpty() || body.getPassword().isEmpty() || body.getPhone().isEmpty()) throw new BlankFields();
     }
+
 }
