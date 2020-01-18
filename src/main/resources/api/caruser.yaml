@@ -172,7 +172,7 @@ paths:
         '200':
           description: successful operation
           schema:
-            $ref: '#/definitions/Cars'
+            $ref: '#/definitions/CarsResponse'
     post:
       tags:
         - carros
@@ -378,7 +378,13 @@ definitions:
     properties:
       token:
         type: string
-
+  CarsResponse:
+    type: object
+    properties:
+      carros:
+        type: array
+        items:
+          $ref: '#/definitions/Cars'
 externalDocs:
   description: ApiSwagger
   url: 'https://app.swaggerhub.com/apis/dieggop/CarUserSystem/1.0.0'

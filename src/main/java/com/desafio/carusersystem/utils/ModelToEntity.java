@@ -21,16 +21,20 @@ public class ModelToEntity {
         retorno.setPhone(usuario.getPhone());
         if (usuario.getCars() != null) {
             retorno.setCars(usuario.getCars().stream().map(car -> {
-                Cars carro =new Cars();
-                carro.setColor(car.getColor());
-                carro.setId(car.getId());
-                carro.setLicensePlate(car.getLicensePlate());
-                carro.setModel(car.getModel());
-                carro.setYear(car.getYear());
-                return carro;
+                return carroModelToCarroEntity(car);
             }).collect(Collectors.toList()));
         }
         return retorno;
+    }
+
+    private static Cars carroModelToCarroEntity(com.desafio.carusersystem.api.model.Cars car) {
+        Cars carro =new Cars();
+        carro.setColor(car.getColor());
+        carro.setId(car.getId());
+        carro.setLicensePlate(car.getLicensePlate());
+        carro.setModel(car.getModel());
+        carro.setYear(car.getYear());
+        return carro;
     }
 
     public static List<com.desafio.carusersystem.api.model.Usuario> listUsuarioEntityToListUsuarioModel(List<Usuario> usuarios) {
@@ -42,6 +46,17 @@ public class ModelToEntity {
 //        return usuarios.stream().map(usuario -> UsuarioEntityToUsuarioModel(usuario)).collect(Collectors.toList());
         return retorno;
     }
+        return null;
+    }
+
+    public static List<com.desafio.carusersystem.api.model.Cars> carsEntityToCarsModel(List<Cars> carros) {
+        if (!carros.isEmpty()) {
+            List<com.desafio.carusersystem.api.model.Cars> retorno = new ArrayList<>();
+            for(Cars carro : carros) {
+                retorno.add(carrosEntityToCarroModel(carro));
+            }
+            return retorno;
+        }
         return null;
     }
     public static com.desafio.carusersystem.api.model.Usuario UsuarioEntityToUsuarioModel(Usuario usuario) {
@@ -60,16 +75,20 @@ public class ModelToEntity {
             retorno.setLastLogin(usuario.getLastLogin().toString());
         }
         retorno.setCars(usuario.getCars().stream().map(car -> {
-            com.desafio.carusersystem.api.model.Cars carro =new com.desafio.carusersystem.api.model.Cars();
-            carro.setColor(car.getColor());
-            carro.setId(car.getId());
-            carro.setLicensePlate(car.getLicensePlate());
-            carro.setModel(car.getModel());
-            carro.setYear(car.getYear());
-            carro.setCount(car.getCounter());
-            return carro;
+            return carrosEntityToCarroModel(car);
         }).collect(Collectors.toList()));
 
         return retorno;
+    }
+
+    private static com.desafio.carusersystem.api.model.Cars carrosEntityToCarroModel(Cars car) {
+        com.desafio.carusersystem.api.model.Cars carro =new com.desafio.carusersystem.api.model.Cars();
+        carro.setColor(car.getColor());
+        carro.setId(car.getId());
+        carro.setLicensePlate(car.getLicensePlate());
+        carro.setModel(car.getModel());
+        carro.setYear(car.getYear());
+        carro.setCount(car.getCounter());
+        return carro;
     }
 }

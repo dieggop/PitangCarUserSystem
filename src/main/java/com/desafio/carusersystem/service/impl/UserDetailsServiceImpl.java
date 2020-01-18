@@ -24,10 +24,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Usuario> usuario = usuarioRepository.findByUsername(username);
-        Usuario applicationUser = usuario.get();
-        if (applicationUser == null) {
-            throw new UsernameNotFoundException("“Invalid login or password");
+        if (!usuario.isPresent()) {
+            throw new UsernameNotFoundException("Invalid login or password");
         }
+        Usuario applicationUser = usuario.get();
         return new User(applicationUser.getUsername(), applicationUser.getPassword(), true, true, true, true,  emptyList());
     }
 }
