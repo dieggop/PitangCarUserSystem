@@ -129,7 +129,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 Usuario applicationUser = usuario.get(); //usuarioRepository.findByUsername(username);
                 return applicationUser;
             } else {
-                throw new ExceptionNotFound("Token inválido");
+                throw new ExceptionConflict("Token inválido");
             }
         }
 

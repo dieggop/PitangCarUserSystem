@@ -4,6 +4,7 @@ import com.desafio.carusersystem.entity.Cars;
 import com.desafio.carusersystem.entity.Usuario;
 import com.desafio.carusersystem.exceptions.ExceptionConflict;
 import com.desafio.carusersystem.exceptions.ExceptionNotFound;
+import com.desafio.carusersystem.exceptions.ExceptionUnauthorized;
 import com.desafio.carusersystem.repository.CarsRepository;
 import com.desafio.carusersystem.repository.UsuarioRepository;
 import com.desafio.carusersystem.security.JwtUtil;
@@ -91,7 +92,7 @@ public class CarrosServiceImpl implements CarrosService {
 
             if (carro.isPresent()) {
                 if (carro.get().getUsuario().getId() != this.applicationUser.getId()) {
-                    throw new ExceptionConflict("Unauthorized");
+                    throw new ExceptionUnauthorized("Unauthorized");
                 }
             }
 

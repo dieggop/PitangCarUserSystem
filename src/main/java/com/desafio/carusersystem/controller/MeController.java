@@ -1,7 +1,9 @@
 package com.desafio.carusersystem.controller;
 
 import com.desafio.carusersystem.api.MeApi;
+import com.desafio.carusersystem.api.model.MessageException;
 import com.desafio.carusersystem.api.model.UsuarioMe;
+import com.desafio.carusersystem.exceptions.ExceptionConflict;
 import com.desafio.carusersystem.exceptions.Message;
 import com.desafio.carusersystem.security.JwtUtil;
 import com.desafio.carusersystem.service.UsuarioService;
@@ -34,17 +36,11 @@ public class MeController implements MeApi {
 
     @Override
     public ResponseEntity<UsuarioMe> dadosUsuario() {
-
-
         try {
-
             return new ResponseEntity(ModelToEntity.UsuarioEntityToUsuarioModel(usuarioService.meusDados()), HttpStatus.OK);
-
-        } catch (Exception e) {
-            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
-
+        } catch (ExceptionConflict e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.CONFLICT.value())), HttpStatus.CONFLICT);
         }
-
     }
 
 }
