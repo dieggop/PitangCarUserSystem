@@ -56,7 +56,31 @@ public class CarrosServiceImpl implements CarrosService {
 
     @Override
     public Cars saveCarro(Cars carro) {
-        return null;
+        if (carro.getId() != null && carsRepository.findById(carro.getId()) == null) {
+            throw new ExceptionNotFound("Not Found");
+        }
+        validacaoSaveOrUpdate(carro);
+        carro.setUsuario(this.applicationUser);
+        Cars retorno = carsRepository.save(carro);
+        return retorno;
+    }
+
+    private void validacaoSaveOrUpdate(Cars carro) throws ExceptionConflict {
+        Optional<Cars> byLicensePlate = carsRepository.findByLicensePlate(carro.getLicensePlate());
+
+        if (carro.getId() == null)
+        {
+            if (byLicensePlate.isPresent()) {
+                throw new ExceptionConflict("License plate already exists");
+            }
+
+        }
+        if (carro.getId() != null)
+        {
+            if (byLicensePlate.isPresent() && byLicensePlate.get().getId() != carro.getId()) {
+                throw new ExceptionConflict("License plate already exists");
+            }
+        }
     }
 
     @Override

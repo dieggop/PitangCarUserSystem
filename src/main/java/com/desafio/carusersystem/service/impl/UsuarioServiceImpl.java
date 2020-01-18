@@ -54,8 +54,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
 
-        usuarioRepository.save(usuario);
-        return usuario;
+        Usuario retorno = usuarioRepository.save(usuario);
+        return retorno;
     }
 
     private void validacaoSaveOrUpdate(Usuario usuario) throws ExceptionConflict {

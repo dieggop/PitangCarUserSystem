@@ -4,10 +4,7 @@ import com.desafio.carusersystem.api.CarsApi;
 import com.desafio.carusersystem.api.model.Cars;
 import com.desafio.carusersystem.api.model.CarsResponse;
 import com.desafio.carusersystem.api.model.MessageException;
-import com.desafio.carusersystem.exceptions.ExceptionConflict;
-import com.desafio.carusersystem.exceptions.ExceptionNotFound;
-import com.desafio.carusersystem.exceptions.ExceptionUnauthorized;
-import com.desafio.carusersystem.exceptions.Message;
+import com.desafio.carusersystem.exceptions.*;
 import com.desafio.carusersystem.service.CarrosService;
 import com.desafio.carusersystem.utils.ModelToEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +30,39 @@ public class CarController implements CarsApi {
 
     @Override
     public ResponseEntity<Void> atualizaCarro(Long id, @Valid Cars body) {
-        return null;
+        try {
+            validarCarro(body);
+            if (body.getId() != id) {
+                return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.BAD_REQUEST);
+            }
+            carsService.saveCarro(body);
+            return new ResponseEntity<>(retorno, HttpStatus.NO_CONTENT);
+        } catch (ExceptionNotFound e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.NOT_FOUND.value())),  HttpStatus.NOT_FOUND);
+        } catch (ExceptionConflict e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.CONFLICT);
+        } catch (ExceptionUnauthorized e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.UNAUTHORIZED.value())), HttpStatus.UNAUTHORIZED);
+        } catch (BlankFields e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override
     public ResponseEntity<Void> cadastrarCarro(@Valid Cars body) {
-        return null;
+        try {
+            validarCarro(body);
+            carsService.saveCarro(body);
+            return new ResponseEntity<>(retorno, HttpStatus.NO_CONTENT);
+        } catch (ExceptionNotFound e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.NOT_FOUND.value())),  HttpStatus.NOT_FOUND);
+        } catch (ExceptionConflict e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.CONFLICT);
+        } catch (ExceptionUnauthorized e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.UNAUTHORIZED.value())), HttpStatus.UNAUTHORIZED);
+        } catch (BlankFields e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override
@@ -47,8 +71,12 @@ public class CarController implements CarsApi {
             CarsResponse retorno = new CarsResponse();
             retorno.setCarros(ModelToEntity.listCarsEntityToCarsModel(carsService.listarCarros()));
             return new ResponseEntity<>(retorno, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+        } catch (ExceptionNotFound e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.NOT_FOUND.value())),  HttpStatus.NOT_FOUND);
+        } catch (ExceptionConflict e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.CONFLICT);
+        } catch (ExceptionUnauthorized e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.UNAUTHORIZED.value())), HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -72,11 +100,20 @@ public class CarController implements CarsApi {
         try {
             carsService.removerCarro(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
         } catch (ExceptionNotFound e) {
-            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.NOT_FOUND.value())),  HttpStatus.NOT_FOUND);
         } catch (ExceptionConflict e) {
-            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.CONFLICT);
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.CONFLICT);
+        } catch (ExceptionUnauthorized e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.UNAUTHORIZED.value())), HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    private Cars validarCarro(Cars carro) {
+        if (carro != null) {
+            if (carro.getModel().isEmpty() || carro.getColor().isEmpty() || carro.getLicensePlate().isEmpty() || carro.getYear() == null || carro.getYear() == 0) {
+                throw new BlankFields();
+            }
         }
     }
 }

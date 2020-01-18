@@ -1,6 +1,7 @@
 package com.desafio.carusersystem.controller;
 
 import com.desafio.carusersystem.api.UsersApi;
+import com.desafio.carusersystem.api.model.MessageException;
 import com.desafio.carusersystem.api.model.Usuario;
 import com.desafio.carusersystem.api.model.UsuarioAtualiza;
 import com.desafio.carusersystem.api.model.UsuarioResponse;
@@ -41,20 +42,20 @@ public class UserController implements UsersApi {
     @Override
     public ResponseEntity<Void> atualizaUsuario(Long id, @Valid Usuario body) {
 
-        if (id != body.getId()) {
-            return new ResponseEntity(new Message("Invalid fields", HttpStatus.CONFLICT), HttpStatus.BAD_REQUEST);
+        if (body.getId() != id) {
+            return new ResponseEntity(new MessageException().message("Invalid Fields").errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.BAD_REQUEST);
         }
 
         try {
             validarUsuario(body);
             usuarioService.save(ModelToEntity.UsuarioModelToUsuarioEntity(body));
         } catch (BlankFields e) {
-            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
-        } catch(ExceptionConflict e) {
-            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.CONFLICT), HttpStatus.CONFLICT);
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.BAD_REQUEST);
+        } catch (ExceptionConflict e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.CONFLICT.value())), HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
 
@@ -65,9 +66,10 @@ public class UserController implements UsersApi {
             System.out.println(ModelToEntity.UsuarioModelToUsuarioEntity(body));
             usuarioService.save(ModelToEntity.UsuarioModelToUsuarioEntity(body));
         } catch (BlankFields e) {
-            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
-        }catch(ExceptionConflict e) {
-            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.CONFLICT), HttpStatus.CONFLICT);
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.BAD_REQUEST);
+
+        } catch (ExceptionConflict e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.CONFLICT.value())), HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -82,31 +84,28 @@ public class UserController implements UsersApi {
 
     @Override
     public ResponseEntity<Usuario> recuperaUsuario(Long id) {
-
-            try{
-                return new ResponseEntity<>(ModelToEntity.UsuarioEntityToUsuarioModel(usuarioService.recuperarUsuario(id)), HttpStatus.OK);
-
-            }catch(ExceptionNotFound e) {
-                return new ResponseEntity(new Message(e.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
-
-            }
-
+        try {
+            return new ResponseEntity<>(ModelToEntity.UsuarioEntityToUsuarioModel(usuarioService.recuperarUsuario(id)), HttpStatus.OK);
+        } catch (ExceptionNotFound e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.NOT_FOUND.value())), HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
     public ResponseEntity<Void> removeUsuario(Long id) {
-        try{
+        try {
             usuarioService.removeUsuario(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-        }catch(ExceptionNotFound e) {
-            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+        } catch (ExceptionNotFound e) {
+            return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.NOT_FOUND.value())), HttpStatus.NOT_FOUND);
 
         }
     }
 
-    private void validarUsuario(Usuario body ) {
-        if (body.getFirstName().isEmpty() || body.getBirthday().isEmpty() || body.getEmail().isEmpty() || body.getLastName().isEmpty() || body.getLogin().isEmpty() || body.getPassword().isEmpty() || body.getPhone().isEmpty()) throw new BlankFields();
+    private void validarUsuario(Usuario body) {
+        if (body.getFirstName().isEmpty() || body.getBirthday().isEmpty() || body.getEmail().isEmpty() || body.getLastName().isEmpty() || body.getLogin().isEmpty() || body.getPassword().isEmpty() || body.getPhone().isEmpty())
+            throw new BlankFields();
     }
 
 }
