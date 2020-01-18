@@ -3,6 +3,8 @@ package com.desafio.carusersystem.controller;
 import com.desafio.carusersystem.api.CarsApi;
 import com.desafio.carusersystem.api.model.Cars;
 import com.desafio.carusersystem.api.model.CarsResponse;
+import com.desafio.carusersystem.exceptions.ExceptionConflict;
+import com.desafio.carusersystem.exceptions.ExceptionNotFound;
 import com.desafio.carusersystem.exceptions.Message;
 import com.desafio.carusersystem.service.CarrosService;
 import com.desafio.carusersystem.utils.ModelToEntity;
@@ -54,13 +56,23 @@ public class CarController implements CarsApi {
             Cars retorno = new Cars();
             retorno = ModelToEntity.carsEntityToCarroModel(carsService.buscarCarro(id));
             return new ResponseEntity<>(retorno, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+        } catch (ExceptionNotFound e) {
+            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.NOT_FOUND);
+        } catch (ExceptionConflict e) {
+            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.CONFLICT);
         }
     }
 
     @Override
     public ResponseEntity<Void> removeCarro(Long id) {
-        return null;
+        try {
+            carsService.removerCarro(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        } catch (ExceptionNotFound e) {
+            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.NOT_FOUND);
+        } catch (ExceptionConflict e) {
+            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.CONFLICT);
+        }
     }
 }

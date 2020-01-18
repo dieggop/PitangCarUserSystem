@@ -60,7 +60,23 @@ public class CarrosServiceImpl implements CarrosService {
 
     @Override
     public void removerCarro(Long id) {
+        initCarrosConfig();
+        if (this.applicationUser != null) {
+            Optional<Cars> carro = carsRepository.findById(id);
 
+            if (!carro.isPresent()) {
+                throw new ExceptionNotFound("Not Found");
+            }
+
+            if (carro.isPresent()) {
+                if (carro.get().getUsuario().getId() != this.applicationUser.getId()) {
+                    throw new ExceptionConflict("Unauthorized");
+                }
+            }
+
+            carro.ifPresent(cars -> carsRepository.delete(cars));
+
+        }
     }
 
     @Override
@@ -75,7 +91,7 @@ public class CarrosServiceImpl implements CarrosService {
 
             if (carro.isPresent()) {
                 if (carro.get().getUsuario().getId() != this.applicationUser.getId()) {
-                    throw new ExceptionNotFound("Unauthorized");
+                    throw new ExceptionConflict("Unauthorized");
                 }
             }
 

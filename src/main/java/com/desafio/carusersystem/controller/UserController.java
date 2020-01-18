@@ -70,7 +70,7 @@ public class UserController implements UsersApi {
             return new ResponseEntity(new Message(e.getMessage(), HttpStatus.CONFLICT), HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class UserController implements UsersApi {
     public ResponseEntity<Void> removeUsuario(Long id) {
         try{
             usuarioService.removeUsuario(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
         }catch(ExceptionNotFound e) {
             return new ResponseEntity(new Message(e.getMessage(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
