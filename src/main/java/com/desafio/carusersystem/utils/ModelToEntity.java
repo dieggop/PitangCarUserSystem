@@ -49,11 +49,11 @@ public class ModelToEntity {
         return null;
     }
 
-    public static List<com.desafio.carusersystem.api.model.Cars> carsEntityToCarsModel(List<Cars> carros) {
+    public static List<com.desafio.carusersystem.api.model.Cars> listCarsEntityToCarsModel(List<Cars> carros) {
         if (!carros.isEmpty()) {
             List<com.desafio.carusersystem.api.model.Cars> retorno = new ArrayList<>();
             for(Cars carro : carros) {
-                retorno.add(carrosEntityToCarroModel(carro));
+                retorno.add(carsEntityToCarroModel(carro));
             }
             return retorno;
         }
@@ -75,13 +75,13 @@ public class ModelToEntity {
             retorno.setLastLogin(usuario.getLastLogin().toString());
         }
         retorno.setCars(usuario.getCars().stream().map(car -> {
-            return carrosEntityToCarroModel(car);
+            return carsEntityToCarroModel(car);
         }).collect(Collectors.toList()));
 
         return retorno;
     }
 
-    private static com.desafio.carusersystem.api.model.Cars carrosEntityToCarroModel(Cars car) {
+    public static com.desafio.carusersystem.api.model.Cars carsEntityToCarroModel(Cars car) {
         com.desafio.carusersystem.api.model.Cars carro =new com.desafio.carusersystem.api.model.Cars();
         carro.setColor(car.getColor());
         carro.setId(car.getId());

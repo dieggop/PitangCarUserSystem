@@ -2,6 +2,8 @@ package com.desafio.carusersystem.service.impl;
 
 import com.desafio.carusersystem.entity.Cars;
 import com.desafio.carusersystem.entity.Usuario;
+import com.desafio.carusersystem.exceptions.ExceptionConflict;
+import com.desafio.carusersystem.exceptions.ExceptionNotFound;
 import com.desafio.carusersystem.repository.CarsRepository;
 import com.desafio.carusersystem.repository.UsuarioRepository;
 import com.desafio.carusersystem.security.JwtUtil;
@@ -42,7 +44,7 @@ public class CarrosServiceImpl implements CarrosService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    private void initCarrosConfig(){
+    private void initCarrosConfig() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         Optional<Usuario> usuario = usuarioRepository.findByUsername(username);
@@ -63,6 +65,22 @@ public class CarrosServiceImpl implements CarrosService {
 
     @Override
     public Cars buscarCarro(Long id) {
+        initCarrosConfig();
+        if (this.applicationUser != null) {
+            Optional<Cars> carro = carsRepository.findById(id);
+
+            if (!carro.isPresent()) {
+                throw new ExceptionNotFound("Not Found");
+            }
+
+            if (carro.isPresent()) {
+                if (carro.get().getUsuario().getId() != this.applicationUser.getId()) {
+                    throw new ExceptionNotFound("Unauthorized");
+                }
+            }
+
+            return carro.get();
+        }
         return null;
     }
 
@@ -70,11 +88,11 @@ public class CarrosServiceImpl implements CarrosService {
     public List<Cars> listarCarros() {
         initCarrosConfig();
 
-        if (this.applicationUser != null ) {
-
-        List<Cars> carros = carsRepository.findByUsuarioId(this.applicationUser.getId());
-        return carros;
+        if (this.applicationUser != null) {
+            List<Cars> carros = carsRepository.findByUsuarioId(this.applicationUser.getId());
+            return carros;
+        } else {
+            throw new ExceptionConflict("Unauthorized");
         }
-        return null;
     }
 }

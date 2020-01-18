@@ -41,7 +41,7 @@ public class CarController implements CarsApi {
     public ResponseEntity<CarsResponse> listarCarros() {
         try {
             CarsResponse retorno = new CarsResponse();
-            retorno.setUsuarios(ModelToEntity.carsEntityToCarsModel(carsService.listarCarros()));
+            retorno.setCarros(ModelToEntity.listCarsEntityToCarsModel(carsService.listarCarros()));
             return new ResponseEntity<>(retorno, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
@@ -50,7 +50,13 @@ public class CarController implements CarsApi {
 
     @Override
     public ResponseEntity<Cars> recuperaCarro(Long id) {
-        return null;
+        try {
+            Cars retorno = new Cars();
+            retorno = ModelToEntity.carsEntityToCarroModel(carsService.buscarCarro(id));
+            return new ResponseEntity<>(retorno, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(new Message(e.getMessage(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override
