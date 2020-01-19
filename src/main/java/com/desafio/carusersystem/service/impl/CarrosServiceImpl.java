@@ -56,7 +56,7 @@ public class CarrosServiceImpl implements CarrosService {
 
     @Override
     public Cars saveCarro(Cars carro) {
-        if (carro.getId() != null && carsRepository.findById(carro.getId()) == null) {
+        if (carro.getId() != null && !carsRepository.findByIdAndUsuarioId(carro.getId(),this.applicationUser.getId()).isPresent()) {
             throw new ExceptionNotFound("Not Found");
         }
         validacaoSaveOrUpdate(carro);
@@ -120,7 +120,10 @@ public class CarrosServiceImpl implements CarrosService {
                 }
             }
 
-            return carro.get();
+            Cars retorno = carro.get();
+            retorno.setCounter(retorno.getCounter()+1);
+            carsRepository.save(retorno);
+            return retorno;
         }
         return null;
     }

@@ -1,10 +1,12 @@
 package com.desafio.carusersystem.security;
 
+import com.desafio.carusersystem.api.model.MessageException;
 import com.desafio.carusersystem.exceptions.ExceptionConflict;
 import com.desafio.carusersystem.exceptions.Message;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -64,8 +66,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         } catch (UsernameNotFoundException e) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("Unauthorized - invalid session");
-            response.setStatus(403);
+            response.getWriter().write("Invalid login or password");
+            response.setStatus(409);
         }
 
 

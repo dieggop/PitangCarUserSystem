@@ -1,8 +1,10 @@
 package com.desafio.carusersystem.service.impl;
 
+import com.desafio.carusersystem.entity.Cars;
 import com.desafio.carusersystem.entity.Usuario;
 import com.desafio.carusersystem.exceptions.ExceptionConflict;
 import com.desafio.carusersystem.exceptions.ExceptionNotFound;
+import com.desafio.carusersystem.repository.CarsRepository;
 import com.desafio.carusersystem.repository.UsuarioRepository;
 import com.desafio.carusersystem.security.JwtUtil;
 import com.desafio.carusersystem.service.UsuarioService;
@@ -26,6 +28,7 @@ import java.util.Optional;
 public class UsuarioServiceImpl implements UsuarioService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private UsuarioRepository usuarioRepository;
+    private CarsRepository carsRepository;
 
     @Autowired
     private HttpServletRequest request;
@@ -34,15 +37,16 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository,UserDetailsService userDetailsService,BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository,UserDetailsService userDetailsService,BCryptPasswordEncoder bCryptPasswordEncoder,CarsRepository carsRepository) {
         this.usuarioRepository = usuarioRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.userDetailsService = userDetailsService;
+        this.carsRepository = carsRepository;
     }
 
     @Override
     public Usuario save(Usuario usuario) {
-        if (usuario.getId() != null && usuarioRepository.findById(usuario.getId()) == null) {
+        if (usuario.getId() != null && !usuarioRepository.findById(usuario.getId()).isPresent()) {
             throw new ExceptionNotFound("Usuário Não encontrado");
         }
 
@@ -80,8 +84,19 @@ public class UsuarioServiceImpl implements UsuarioService {
                 throw new ExceptionConflict("Email already exists");
             }
         }
+
+        for (Cars carroCheck : usuario.getCars()) {
+            verificaExistenciaDeCarro(carroCheck);
+        }
+
     }
 
+    private void verificaExistenciaDeCarro(Cars carro) {
+        Optional<Cars> byLicensePlate = carsRepository.findByLicensePlate(carro.getLicensePlate());
+        if (byLicensePlate.isPresent()) {
+            throw new ExceptionConflict("License plate already exists");
+        }
+    }
     @Override
     public void removeUsuario(Long id) {
         Optional<Usuario> retorno = usuarioRepository.findById(id);

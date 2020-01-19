@@ -1,6 +1,7 @@
 package com.desafio.carusersystem.controller;
 
 import com.desafio.carusersystem.api.SigninApi;
+import com.desafio.carusersystem.api.model.MessageException;
 import com.desafio.carusersystem.api.model.UserLogin;
 import com.desafio.carusersystem.api.model.UsuarioLoginResponse;
 import com.desafio.carusersystem.exceptions.Message;
@@ -54,9 +55,10 @@ public class LogarController implements SigninApi {
             return new ResponseEntity<>(new UsuarioLoginResponse().token(jwt), HttpStatus.OK);
         }
         catch(BadCredentialsException e ) {
-            return new ResponseEntity(new Message("Invalid login or password",HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new MessageException().message("Invalid login or password").errorCode(Long.valueOf(HttpStatus.NOT_FOUND.value())), HttpStatus.NOT_FOUND);
         } catch(AuthenticationServiceException e) {
-            return new ResponseEntity(new Message("Invalid login or password",HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new MessageException().message("Invalid login or password").errorCode(Long.valueOf(HttpStatus.NOT_FOUND.value())), HttpStatus.NOT_FOUND);
+
         }
     }
 

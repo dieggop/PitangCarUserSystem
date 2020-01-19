@@ -33,10 +33,10 @@ public class CarController implements CarsApi {
         try {
             validarCarro(body);
             if (body.getId() != id) {
-                return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new MessageException().message("Invalid fields").errorCode(Long.valueOf(HttpStatus.BAD_REQUEST.value())), HttpStatus.BAD_REQUEST);
             }
-            carsService.saveCarro(body);
-            return new ResponseEntity<>(retorno, HttpStatus.NO_CONTENT);
+            carsService.saveCarro(ModelToEntity.carroModelToCarroEntity(body));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ExceptionNotFound e) {
             return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.NOT_FOUND.value())),  HttpStatus.NOT_FOUND);
         } catch (ExceptionConflict e) {
@@ -52,8 +52,8 @@ public class CarController implements CarsApi {
     public ResponseEntity<Void> cadastrarCarro(@Valid Cars body) {
         try {
             validarCarro(body);
-            carsService.saveCarro(body);
-            return new ResponseEntity<>(retorno, HttpStatus.NO_CONTENT);
+            carsService.saveCarro(ModelToEntity.carroModelToCarroEntity(body));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ExceptionNotFound e) {
             return new ResponseEntity(new MessageException().message(e.getMessage()).errorCode(Long.valueOf(HttpStatus.NOT_FOUND.value())),  HttpStatus.NOT_FOUND);
         } catch (ExceptionConflict e) {
@@ -109,11 +109,9 @@ public class CarController implements CarsApi {
         }
     }
 
-    private Cars validarCarro(Cars carro) {
-        if (carro != null) {
-            if (carro.getModel().isEmpty() || carro.getColor().isEmpty() || carro.getLicensePlate().isEmpty() || carro.getYear() == null || carro.getYear() == 0) {
-                throw new BlankFields();
-            }
+    private void validarCarro(Cars carro) {
+        if (carro.getModel().isEmpty() || carro.getColor().isEmpty() || carro.getLicensePlate().isEmpty() || carro.getYear() == null || carro.getYear() == 0) {
+            throw new BlankFields();
         }
     }
 }

@@ -27,7 +27,7 @@ public class ModelToEntity {
         return retorno;
     }
 
-    private static Cars carroModelToCarroEntity(com.desafio.carusersystem.api.model.Cars car) {
+    public static Cars carroModelToCarroEntity(com.desafio.carusersystem.api.model.Cars car) {
         Cars carro =new Cars();
         carro.setColor(car.getColor());
         carro.setId(car.getId());
