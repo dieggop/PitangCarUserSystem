@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api")
 public class UserController implements UsersApi {
@@ -39,6 +39,7 @@ public class UserController implements UsersApi {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<Void> atualizaUsuario(Long id, @Valid Usuario body) {
 
@@ -75,6 +76,7 @@ public class UserController implements UsersApi {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @CrossOrigin(origins = "*")
     @Override
     public ResponseEntity<UsuarioResponse> listarUsuarios() {
         UsuarioResponse retorno = new UsuarioResponse();
