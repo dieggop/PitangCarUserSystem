@@ -28,7 +28,7 @@ public class Usuario {
     @OneToMany
     @JoinColumn(name = "usuario_id")
     @OrderBy("counter DESC, model ASC")
-    @Cascade({CascadeType.ALL})
+    @Cascade({CascadeType.PERSIST})
     private List<Cars> cars;
 
     public Long getId() {
