@@ -74,6 +74,10 @@ public class UsuarioServiceImpl implements UsuarioService {
             if (byEmail.isPresent()) {
                 throw new ExceptionConflict("Email already exists");
             }
+
+            for (Cars carroCheck : usuario.getCars()) {
+                verificaExistenciaDeCarro(carroCheck);
+            }
         }
         if (usuario.getId() != null)
         {
@@ -83,10 +87,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             if (byEmail.isPresent() && byEmail.get().getId() != usuario.getId()) {
                 throw new ExceptionConflict("Email already exists");
             }
-        }
 
-        for (Cars carroCheck : usuario.getCars()) {
-            verificaExistenciaDeCarro(carroCheck);
         }
 
     }
