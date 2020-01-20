@@ -21,7 +21,6 @@ public class Cars {
 
     @ManyToOne
     @JoinColumn(name="usuario_id")
-    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     private Usuario usuario;
 
     public Long getCounter() {

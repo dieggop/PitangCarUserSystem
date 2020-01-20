@@ -51,13 +51,17 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         validacaoSaveOrUpdate(usuario);
-
+        String password = usuario.getPassword();
         if (usuario.getId() == null ) {
             usuario.setCreatedAt(LocalDate.now());
             usuario.setLastLogin(LocalDate.now());
         }
-        usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
-
+        if (!password.isEmpty()) {
+            usuario.setPassword(bCryptPasswordEncoder.encode(password));
+        }
+        if (usuario.getId() != null) {
+            usuario.setCars(carsRepository.findByUsuarioId(usuario.getId()));
+        }
         Usuario retorno = usuarioRepository.save(usuario);
         return retorno;
     }
